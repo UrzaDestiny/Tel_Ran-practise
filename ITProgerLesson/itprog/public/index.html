@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+
+      <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+      <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+      <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+    <title>React App</title>
+    <link rel="stylesheet" href="main.css">
+  </head>
+  <body>
+
+    <div id="root"></div>
+
+    <div id="example"></div>
+
+    <script type="text/babel">
+        class Task extends React.Component {
+            constructor(props){
+                super(props);
+                this.state = {edit: false};
+            };
+
+            edit = () => {
+               this.setState ({edit: true});
+            };
+
+            remove = () =>{
+                this.props.deleteBlock(this.props.index);
+            };
+            save = () =>{
+                let value = this.refs.newTxt.value;
+                this.props.update(this.refs.newTxt.value, this.props.index)
+                this.setState ({edit: false})
+            };
+            rendNorm = () =>{
+                return (
+                    <div className="box">
+                      <div className="text">{this.props.children}</div>
+                      <button onClick={this.edit} className="btn light">Редактировать</button>
+                      <button onClick={this.remove} className="btn red">Удалить</button>
+                    </div>
+                )
+            };
+            rendEdit = () =>{
+                return(
+                    <div className="box">
+                      <textarea ref="newTxt" defaultValue={this.props.children}></textarea>
+                      <button onClick={this.save} className="btn success">Save</button>
+                    </div>
+                )
+            };
+
+            render(){
+                    if (this.state.edit){
+                        return this.rendEdit();
+                    }else{
+                        return this.rendNorm();
+                    };
+            };
+        };
+
+        class Field extends  React.Component {
+            constructor (props){
+                super (props);
+                this.state = {
+                    tasks: [
+                        'Необходимо купить молоко!',
+                        'Надо почистить зубы',
+                        'Просто отдохнуть'
+                    ]
+                    }
+                }
+
+                deleteBlock =(i)=>{
+                let arr = this.state.tasks;
+                arr.splice(i, 1);
+                this.setState({tasks: arr});
+                }
+
+                updateText = (text, i) =>{
+                let arr = this.state.tasks;
+                arr[i] = text;
+                this.setState({tasks: arr});
+                }
+
+                eachTask = (item, i) =>{
+                return (
+                    <Task key={i} index={i} update={this.updateText} deliteBlock={this.deleteBlock}>
+                        {item}
+                        </Task>
+                )}
+
+                render(){
+                return (
+                    <div className="field">
+                        {this.state.tasks.map(this.eachTask)}
+                    </div>
+                )
+                }
+            }
+
+
+        ReactDOM.render(
+            <Field/>,
+            document.getElementById('example'));
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<input type="number" id="fromValue">
+
+<select id="selFrom"></select>
+
+<input id="res">
+
+<select id="selTo"></select>
+
+<button id="calc">Calculate</button>
+
+<script>
+
+    let xhr = new XMLHttpRequest(); //запрос
+    let obj ={}; // расджейсоненый обьект (ответ на запрос)
+    let rates = {}; // забрали у обьекта рэйты (мап)
+    let currs = {}; // список ключей от рэйтов (массив)
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState != 4)return;
+
+        obj = JSON.parse(xhr.response);
+        console.log(obj);
+        rates = obj.rates;
+        rates[obj.base] = 1;
+        currs = Object.keys(rates);
+
+
+        for (let i=0; i<currs.length; i++){
+            let opt1 = document.createElement("option");
+            let opt2 = document.createElement("option");
+            opt1.innerText = currs[i];
+            opt2.innerText = currs[i];
+
+            // if(currs[i] == "EUR"){
+            //     opt1.selected = true;
+            //     opt2.selected = true;
+            // }
+
+            selFrom.appendChild(opt1);
+            selTo.appendChild(opt2);
+        }
+
+    }
+
+
+    xhr.open("GET", "http://data.fixer.io/api/latest?access_key=416b9d4a8622014b57c02f65f6738909");
+    xhr.send();
+
+    selFrom.value = "EUR";
+    selTo.value = "EUR";
+    fromValue.value = 0;
+    res.value = 0;
+
+    calc.addEventListener("click", function () {
+        ;
+    });
+
+</script>
+
+</body>
+</html>

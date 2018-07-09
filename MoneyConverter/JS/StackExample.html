@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+
+    class EditFiles extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+                posts: []
+            }
+        }
+
+        componentDidMount() {
+            var xhttp = new XMLHttpRequest();
+            var self = this;
+
+            xhttp.onreadystatechange = function(e){
+                console.log(this);
+                if (xhttp.readyState === 4 && xhttp.status === 200){
+                    console.log("ok, response :", this.response);
+                    self.setState({
+                        posts: JSON.parse(this.response)
+                    });
+                }
+            }
+            xhttp.open("get", "https://jsonplaceholder.typicode.com/posts", true);
+            xhttp.send();
+        }
+
+        render() {
+            let postsLoaded = this.state.posts.length > 0;
+            return(
+                postsLoaded ?
+                    <ul>
+                        {
+                            this.state.posts.map(
+                                post => {
+                                    return <li>{ post.title }</li>;
+                                })
+                        }
+                    </ul>
+                    :
+                    <div>Loading...</div>
+            );
+        }
+    }
+
+    ReactDOM.render(
+        <EditFiles />,
+        document.getElementById('root')
+    );
+
+</script>
+
+</body>
+</html>

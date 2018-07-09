@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+</head>
+
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+
+    function Argument(props) {
+        return(
+            <input className="argument" type="number" value={props.value}/>
+        )
+    }
+
+    class Calculator extends React.Component {
+        constructor(props){
+            super(props);
+            this.state = {
+                result: 0,
+            }
+        }
+
+
+
+        handleClick(){
+
+        }
+
+        render(){
+            return(
+                <div className="calculator">
+                    <Argument/>
+                    <Argument/>
+                    <input className="res" type="number" readOnly value={this.state.result}/>
+                    <button onClick={this.handleClick}>
+                        Calculate
+                    </button>
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(
+        <Calculator/>,
+        document.getElementById('root')
+    );
+
+</script>
+
+</body>
+</html>

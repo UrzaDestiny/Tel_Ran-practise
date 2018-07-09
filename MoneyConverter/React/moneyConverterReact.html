@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <title>Money Converter</title>
+
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+
+    function Selector(props) {
+          return(
+            <select>{props.value.map(function (cur) {
+                return(
+                    <option>{cur}</option>
+                )
+            })}</select>
+          );
+        };
+
+
+    class Converter extends React.Component {
+        constructor(props){
+            super(props);
+            this.state = {
+                rates: {},
+                currs: [],
+            }
+        };
+
+        componentDidMount(){
+            let xhr = new XMLHttpRequest();
+            let rates;
+            let currss;
+            xhr.open('GET', 'http://data.fixer.io/api/latest?access_key=ffd9eaffcc177777238f095b46daeb1a');
+            xhr.onload = function (e) {
+                if(xhr.readyState === 4 && xhr.status === 200){
+                    let obj = JSON.parse(xhr.response);
+                    rates = obj.rates;
+                    currss = Object.keys(rates);
+                    this.setState({
+                        rates: rates,
+                        currs: currss
+                    })
+                }
+            }.bind(this);
+            xhr.send();
+            console.log('up');
+
+        };
+
+        handleClick(){
+        //    res.value = fromValue.value / rates[selFrom.value] * rates[selTo.value]
+        }
+
+        render(){
+            const rrr = this.state.rates;
+            const ccc = this.state.currs;
+            const res = 0;
+            console.log(rrr);
+            return(
+            <div>
+                <input className="from" type="number" />
+
+                <Selector value={ccc}/>
+
+                <input className="res" type="number" readOnly value={res}/>
+
+                <Selector value={ccc}/>
+
+
+                <button onClick={this.handleClick}>Calculate</button>
+
+            </div>
+
+        )
+        }
+        }
+
+
+//===================================
+
+    ReactDOM.render(<Converter/>,
+        document.getElementById('root'));
+</script>
+
+</body>
+</html>
+<!--<Selector value={ccc}/>-->
